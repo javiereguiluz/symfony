@@ -109,6 +109,7 @@ class Response
         428 => 'Precondition Required',                                       // RFC6585
         429 => 'Too Many Requests',                                           // RFC6585
         431 => 'Request Header Fields Too Large',                             // RFC6585
+        451 => 'Unavailable For Legal Reasons',
         500 => 'Internal Server Error',
         501 => 'Not Implemented',
         502 => 'Bad Gateway',
@@ -976,11 +977,12 @@ class Response
         return $notModified;
     }
 
-    // http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
     /**
      * Is response invalid?
      *
      * @return bool
+     *
+     * @see http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html
      */
     public function isInvalid()
     {

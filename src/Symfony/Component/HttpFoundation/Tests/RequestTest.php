@@ -17,11 +17,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {
-    public function testConstructor()
-    {
-        $this->testInitialize();
-    }
-
     public function testInitialize()
     {
         $request = new Request();
@@ -868,6 +863,9 @@ class RequestTest extends \PHPUnit_Framework_TestCase
 
             // client IP with port
             array(array('88.88.88.88'), '127.0.0.1', '88.88.88.88:12345, 127.0.0.1', array('127.0.0.1')),
+
+            // invalid forwarded IP is ignored
+            array(array('88.88.88.88'), '127.0.0.1', 'unknown,88.88.88.88', array('127.0.0.1')),
         );
     }
 
@@ -1671,7 +1669,7 @@ class RequestTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('/');
         $request->headers->set('host', $host);
         $this->assertEquals($host, $request->getHost());
-        $this->assertLessThan(1, microtime(true) - $start);
+        $this->assertLessThan(3, microtime(true) - $start);
     }
 
     /**
