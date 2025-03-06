@@ -1,14 +1,9 @@
-<table class="logs" data-filter-level="Emergency,Alert,Critical,Error,Warning,Notice,Info,Debug" data-filters>
-<?php $channelIsDefined = isset($logs[0]['channel']); ?>
-    <thead>
-        <tr>
+<div class="logs" data-filter-level="Emergency,Alert,Critical,Error,Warning,Notice,Info,Debug" data-filters>
+    <!--
+    <?php $channelIsDefined = isset($logs[0]['channel']); ?>
             <th data-filter="level">Level</th>
             <?php if ($channelIsDefined) { ?><th data-filter="channel">Channel</th><?php } ?>
-            <th class="full-width">Message</th>
-        </tr>
-    </thead>
-
-    <tbody>
+-->
     <?php
     foreach ($logs as $log) {
         if ($log['priority'] >= 400) {
@@ -22,24 +17,25 @@
             }
             $status = \E_DEPRECATED === $severity || \E_USER_DEPRECATED === $severity ? 'warning' : 'normal';
         } ?>
-        <tr class="status-<?= $status; ?>" data-filter-level="<?= strtolower($this->escape($log['priorityName'])); ?>"<?php if ($channelIsDefined) { ?> data-filter-channel="<?= $this->escape($log['channel']); ?>"<?php } ?>>
-            <td class="text-small nowrap">
-                <span class="colored text-bold"><?= $this->escape($log['priorityName']); ?></span>
-                <span class="text-muted newline"><?= date('H:i:s', $log['timestamp']); ?></span>
-            </td>
-            <?php if ($channelIsDefined) { ?>
-            <td class="text-small text-bold nowrap">
-                <?= $this->escape($log['channel']); ?>
-            </td>
-            <?php } ?>
-            <td>
-                <?= $this->formatLogMessage($log['message'], $log['context']); ?>
-                <?php if ($log['context']) { ?>
-                <pre class="text-muted prewrap m-t-5"><?= $this->escape(json_encode($log['context'], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES)); ?></pre>
+
+        <div class="log status-<?= $status; ?>" data-filter-level="<?= strtolower($this->escape($log['priorityName'])); ?>"
+            <?php if ($channelIsDefined) { ?> data-filter-channel="<?= $this->escape($log['channel']); ?>"<?php } ?>
+            <?php if ('debug' === strtolower($log['priorityName'])) { ?> style="display: none"<?php } ?>
+        >
+            <p class="log-metadata nowrap">
+                <span class="text-muted"><?= date('H:i:s', $log['timestamp']); ?></span>
+                <span class="colored text-bold text-small"><?= $this->escape($log['priorityName']); ?></span>
+                <?php if ($channelIsDefined) { ?>
+                    <span><?= $this->escape($log['channel']); ?></span>
                 <?php } ?>
-            </td>
-        </tr>
-    <?php
+            </p>
+            <p class="log-message">
+                <?= $this->formatLogMessage($log['message'], $log['context']); ?>
+            </p>
+            <?php if ($log['context']) { ?>
+                <pre class="text-muted prewrap m-t-5"><?= $this->escape(json_encode($log['context'], \JSON_PRETTY_PRINT | \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES)); ?></pre>
+            <?php } ?>
+        </div>
+        <?php
     } ?>
-    </tbody>
-</table>
+</div>

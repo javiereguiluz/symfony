@@ -1,18 +1,5 @@
+<?php /* ?>
 <div class="exception-summary <?= !$exceptionMessage ? 'exception-without-message' : ''; ?>">
-    <div class="exception-metadata">
-        <div class="container">
-            <h2 class="exception-hierarchy">
-                <?php foreach (array_reverse($exception->getAllPrevious(), true) as $index => $previousException) { ?>
-                    <a href="#trace-box-<?= $index + 2; ?>"><?= $this->abbrClass($previousException->getClass()); ?></a>
-                    <span class="icon"><?= $this->include('assets/images/chevron-right.svg'); ?></span>
-                <?php } ?>
-                <a href="#trace-box-1"><?= $this->abbrClass($exception->getClass()); ?></a>
-            </h2>
-            <h2 class="exception-http">
-                HTTP <?= $statusCode; ?> <small><?= $statusText; ?></small>
-            </h2>
-        </div>
-    </div>
     <div class="exception-message-wrapper">
         <div class="container">
             <h1 class="break-long-words exception-message<?= mb_strlen($exceptionMessage) > 180 ? ' long' : ''; ?>"><?= $this->formatFileFromText(nl2br($exceptionMessage)); ?></h1>
@@ -23,7 +10,27 @@
         </div>
     </div>
 </div>
+<?php */ ?>
 
+<div class="container">
+    <div class="traces-log-container">
+        <div class="traces-wrapper">
+
+        </div>
+
+        <div class="logs-wrapper">
+            <?php if ($logger?->getLogs()): ?>
+                <?= $this->include('views/logs.html.php', ['logs' => $logger->getLogs()]) ?>
+            <?php else: ?>
+                <div class="empty">
+                    <p>No log messages</p>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<?php /* ?>
 <div class="container">
     <div class="sf-tabs">
         <div class="tab">
@@ -113,3 +120,4 @@
         <?php } ?>
     </div>
 </div>
+<?php */ ?>
