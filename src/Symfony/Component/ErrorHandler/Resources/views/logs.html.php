@@ -24,7 +24,7 @@
         >
             <p class="log-metadata nowrap">
                 <span class="text-muted"><?= date('H:i:s', $log['timestamp']); ?></span>
-                <span class="colored text-bold text-small"><?= $this->escape($log['priorityName']); ?></span>
+                <span class="text-bold text-small text-<?= $status; ?>"><?= strtolower($this->escape($log['priorityName'])); ?></span>
                 <?php if ($channelIsDefined) { ?>
                     <span><?= $this->escape($log['channel']); ?></span>
                 <?php } ?>

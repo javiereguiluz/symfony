@@ -37,10 +37,11 @@
             </header>
         <?php } ?>
 
-        <?php if (null !== $requestCollector) { ?>
+        <?php if (null !== $request) { ?>
             <div class="container">
                 <div>
-                    ...
+                    <?= $request->getMethod() ?>
+                    <?= $request->getPathInfo() ?>
                 </div>
             </div>
         <?php } ?>

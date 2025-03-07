@@ -19,7 +19,61 @@
         </div>
 
         <div class="logs-wrapper">
+            <?php if ($request): ?>
+                <div>
+                    <div class="divider">
+                        <div class="divider-label">Request HTTP Headers</div>
+                        <div class="divider-line"></div>
+                    </div>
+
+                    <div class="http-header-list">
+                        <?php $httpRequests = $request->headers->all(); ksort($httpRequests); ?>
+                        <?php foreach ($httpRequests as $key => $values): ?>
+                            <span class="http-header">
+                                <strong><?= $this->escape($key) ?></strong>
+                                <?= $this->escape(implode(', ', $values)) ?>
+                            </span>
+                        <?php endforeach; ?>
+                    </div>
+
+                    <button id="toggle-http-headers" class="btn">
+                        <span>View all &rarr;</span>
+                    </button>
+
+                    <div id="http-headers-panel" style="display: none; margin-top: 10px; padding: 10px; background: var(--base-1); border-radius: 4px;">
+                        <?php if ($request && $request->headers->all()): ?>
+                            <?php foreach ($request->headers->all() as $key => $values): ?>
+                                <tr>
+                                    <td style="padding-right: 20px;"><?= htmlspecialchars($key) ?></td>
+                                    <td><?= htmlspecialchars(implode(', ', $values)) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php else: ?>
+                            <p>No HTTP headers available</p>
+                        <?php endif; ?>
+                    </div>
+
+                    <script>
+                        document.getElementById('toggle-http-headers').addEventListener('click', function() {
+                            const panel = document.getElementById('http-headers-panel');
+                            if (panel.style.display === 'none') {
+                                panel.style.display = 'block';
+                                this.classList.add('active');
+                            } else {
+                                panel.style.display = 'none';
+                                this.classList.remove('active');
+                            }
+                        });
+                    </script>
+                </div>
+            <?php endif; ?>
+
             <?php if ($logger?->getLogs()): ?>
+                <div class="divider">
+                    <div class="divider-label">Logs</div>
+                    <div class="divider-line"></div>
+                </div>
+
                 <?= $this->include('views/logs.html.php', ['logs' => $logger->getLogs()]) ?>
             <?php else: ?>
                 <div class="empty">

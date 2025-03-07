@@ -16,7 +16,6 @@ use Symfony\Component\ErrorHandler\Exception\FlattenException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Log\DebugLoggerConfigurator;
-use Symfony\Component\HttpKernel\Profiler\Profiler;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
@@ -53,7 +52,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         private ?string $projectDir = null,
         string|callable $outputBuffer = '',
         private ?LoggerInterface $logger = null,
-        private ?Profiler $profiler = null,
+        private ?RequestStack $requestStack = null,
     ) {
         $this->debug = \is_bool($debug) ? $debug : $debug(...);
         $this->charset = $charset ?: (\ini_get('default_charset') ?: 'UTF-8');
@@ -138,6 +137,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
         }
 
         $exceptionMessage = $this->escape($exception->getMessage());
+        $request = $this->requestStack?->getMainRequest();
 
         return $this->include($debugTemplate, [
             'exception' => $exception,
@@ -146,7 +146,7 @@ class HtmlErrorRenderer implements ErrorRendererInterface
             'statusCode' => $statusCode,
             'logger' => null !== $this->logger && class_exists(DebugLoggerConfigurator::class) ? DebugLoggerConfigurator::getDebugLogger($this->logger) : null,
             'currentContent' => \is_string($this->outputBuffer) ? $this->outputBuffer : ($this->outputBuffer)(),
-            'requestCollector' => $this->profiler?->get('request'),
+            'request' => $request,
         ]);
     }
 
