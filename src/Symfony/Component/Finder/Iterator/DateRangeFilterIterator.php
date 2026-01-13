@@ -47,12 +47,7 @@ class DateRangeFilterIterator extends \FilterIterator
         }
 
         $filedate = $fileinfo->getMTime();
-        foreach ($this->comparators as $compare) {
-            if (!$compare->test($filedate)) {
-                return false;
-            }
-        }
 
-        return true;
+        return array_all($this->comparators, static fn (DateComparator $compare): bool => $compare->test($filedate));
     }
 }

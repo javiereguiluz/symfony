@@ -189,13 +189,7 @@ class Profile
 
     public function getChildByToken(string $token): ?self
     {
-        foreach ($this->children as $child) {
-            if ($token === $child->getToken()) {
-                return $child;
-            }
-        }
-
-        return null;
+        return array_find($this->children, static fn (self $child): bool => $token === $child->getToken());
     }
 
     /**

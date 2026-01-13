@@ -121,16 +121,7 @@ class FormFactoryBuilder implements FormFactoryBuilderInterface
         $extensions = $this->extensions;
 
         if ($this->forceCoreExtension) {
-            $hasCoreExtension = false;
-
-            foreach ($extensions as $extension) {
-                if ($extension instanceof CoreExtension) {
-                    $hasCoreExtension = true;
-                    break;
-                }
-            }
-
-            if (!$hasCoreExtension) {
+            if (array_all($extensions, static fn ($extension): bool => !$extension instanceof CoreExtension)) {
                 array_unshift($extensions, new CoreExtension());
             }
         }

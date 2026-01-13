@@ -161,13 +161,7 @@ class Serializer implements SerializerInterface
      */
     private function findFirstSerializerStamp(array $stamps): ?SerializerStamp
     {
-        foreach ($stamps as $stamp) {
-            if ($stamp instanceof SerializerStamp) {
-                return $stamp;
-            }
-        }
-
-        return null;
+        return array_find($stamps, static fn (StampInterface $stamp): bool => $stamp instanceof SerializerStamp);
     }
 
     private function getContentTypeHeader(): array

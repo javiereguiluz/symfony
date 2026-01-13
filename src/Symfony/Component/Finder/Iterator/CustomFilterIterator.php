@@ -50,12 +50,6 @@ class CustomFilterIterator extends \FilterIterator
     {
         $fileinfo = $this->current();
 
-        foreach ($this->filters as $filter) {
-            if (false === $filter($fileinfo)) {
-                return false;
-            }
-        }
-
-        return true;
+        return array_all($this->filters, static fn ($filter): bool => false !== $filter($fileinfo));
     }
 }

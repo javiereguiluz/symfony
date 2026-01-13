@@ -106,12 +106,7 @@ class Envelope
         if ($this->getSender()->hasUnicodeLocalpart()) {
             return true;
         }
-        foreach ($this->getRecipients() as $r) {
-            if ($r->hasUnicodeLocalpart()) {
-                return true;
-            }
-        }
 
-        return false;
+        return array_any($this->getRecipients(), static fn (Address $r): bool => $r->hasUnicodeLocalpart());
     }
 }

@@ -231,14 +231,8 @@ final class Headers
             $headerClasses = [$headerClasses];
         }
 
-        if (!$headerClasses) {
+        if (!$headerClasses || array_any($headerClasses, static fn (string $c): bool => $header instanceof $c)) {
             return;
-        }
-
-        foreach ($headerClasses as $c) {
-            if ($header instanceof $c) {
-                return;
-            }
         }
 
         throw new LogicException(\sprintf('The "%s" header must be an instance of "%s" (got "%s").', $header->getName(), implode('" or "', $headerClasses), get_debug_type($header)));

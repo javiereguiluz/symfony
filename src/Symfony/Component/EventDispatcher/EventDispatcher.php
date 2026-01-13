@@ -114,13 +114,7 @@ class EventDispatcher implements EventDispatcherInterface
             return !empty($this->listeners[$eventName]);
         }
 
-        foreach ($this->listeners as $eventListeners) {
-            if ($eventListeners) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->listeners, static fn (array $eventListeners) => (bool) $eventListeners);
     }
 
     public function addListener(string $eventName, callable|array $listener, int $priority = 0): void

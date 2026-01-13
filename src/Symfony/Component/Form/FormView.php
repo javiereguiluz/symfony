@@ -64,13 +64,7 @@ class FormView implements \ArrayAccess, \IteratorAggregate, \Countable
             return $this->rendered;
         }
 
-        foreach ($this->children as $child) {
-            if (!$child->isRendered()) {
-                return false;
-            }
-        }
-
-        return $this->rendered = true;
+        return $this->rendered = array_all($this->children, static fn (self $child): bool => $child->isRendered());
     }
 
     /**

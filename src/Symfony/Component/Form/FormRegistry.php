@@ -59,11 +59,8 @@ class FormRegistry implements FormRegistryInterface
         if (!isset($this->types[$name])) {
             $type = null;
 
-            foreach ($this->extensions as $extension) {
-                if ($extension->hasType($name)) {
-                    $type = $extension->getType($name);
-                    break;
-                }
+            if ($extension = array_find($this->extensions, static fn (FormExtensionInterface $ext): bool => $ext->hasType($name))) {
+                $type = $extension->getType($name);
             }
 
             if (!$type) {

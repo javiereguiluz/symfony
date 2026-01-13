@@ -107,16 +107,7 @@ class FormType extends BaseType
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        $multipart = false;
-
-        foreach ($view->children as $child) {
-            if ($child->vars['multipart']) {
-                $multipart = true;
-                break;
-            }
-        }
-
-        $view->vars['multipart'] = $multipart;
+        $view->vars['multipart'] = array_any($view->children, static fn (FormView $child): bool => true === $child->vars['multipart']);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

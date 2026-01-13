@@ -75,12 +75,6 @@ final class SigningSerializer implements SerializerInterface
 
     private function shouldSign(string $type): bool
     {
-        foreach ($this->signedMessageTypes as $signedType) {
-            if (is_a($type, $signedType, true)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->signedMessageTypes, static fn (string $signedType): bool => is_a($type, $signedType, true));
     }
 }

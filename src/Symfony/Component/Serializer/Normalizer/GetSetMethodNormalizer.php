@@ -200,11 +200,7 @@ final class GetSetMethodNormalizer extends AbstractObjectNormalizer
         $constructor = $reflection->getConstructor();
 
         if ($constructor && $constructor->isPublic()) {
-            foreach ($constructor->getParameters() as $parameter) {
-                if ($parameter->getName() === $attribute) {
-                    return true;
-                }
-            }
+            return array_any($constructor->getParameters(), static fn (\ReflectionParameter $parameter): bool => $parameter->getName() === $attribute);
         }
 
         return false;

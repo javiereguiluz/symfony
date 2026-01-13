@@ -130,11 +130,8 @@ class ArrayChoiceList implements ChoiceListInterface
 
         // Otherwise compare choices by identity
         foreach ($choices as $i => $givenChoice) {
-            foreach ($this->choices as $value => $choice) {
-                if ($choice === $givenChoice) {
-                    $values[$i] = (string) $value;
-                    break;
-                }
+            if (null !== $value = array_find_key($this->choices, static fn ($choice): bool => $choice === $givenChoice)) {
+                $values[$i] = (string) $value;
             }
         }
 

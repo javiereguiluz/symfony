@@ -43,13 +43,7 @@ final class Transports implements TransportInterface
 
     public function supports(MessageInterface $message): bool
     {
-        foreach ($this->transports as $transport) {
-            if ($transport->supports($message)) {
-                return true;
-            }
-        }
-
-        return false;
+        return array_any($this->transports, static fn (TransportInterface $transport): bool => $transport->supports($message));
     }
 
     public function send(MessageInterface $message): SentMessage

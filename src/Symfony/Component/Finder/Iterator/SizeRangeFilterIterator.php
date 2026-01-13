@@ -46,12 +46,7 @@ class SizeRangeFilterIterator extends \FilterIterator
         }
 
         $filesize = $fileinfo->getSize();
-        foreach ($this->comparators as $compare) {
-            if (!$compare->test($filesize)) {
-                return false;
-            }
-        }
 
-        return true;
+        return array_all($this->comparators, static fn (NumberComparator $compare): bool => $compare->test($filesize));
     }
 }

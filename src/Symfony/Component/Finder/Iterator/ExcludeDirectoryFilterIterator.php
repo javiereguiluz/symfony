@@ -84,11 +84,7 @@ class ExcludeDirectoryFilterIterator extends \FilterIterator implements \Recursi
         }
 
         if ($this->pruneFilters && $this->hasChildren()) {
-            foreach ($this->pruneFilters as $pruneFilter) {
-                if (!$pruneFilter($this->current())) {
-                    return false;
-                }
-            }
+            return array_all($this->pruneFilters, fn ($pruneFilter) => $pruneFilter($this->current()));
         }
 
         return true;
