@@ -1013,11 +1013,7 @@ class OptionsResolver implements Options
             $valid = true;
             $invalidTypes = [];
 
-            foreach ($this->allowedTypes[$option] as $type) {
-                if ($valid = $this->verifyTypes($type, $value, $invalidTypes)) {
-                    break;
-                }
-            }
+            $valid = array_any($this->allowedTypes[$option], fn ($type): bool => $this->verifyTypes($type, $value, $invalidTypes));
 
             if (!$valid) {
                 $fmtActualValue = $this->formatValue($value);

@@ -468,11 +468,8 @@ abstract class AbstractController implements ServiceSubscriberInterface
         $response ??= new Response();
 
         if (200 === $response->getStatusCode()) {
-            foreach ($parameters as $v) {
-                if ($v instanceof FormInterface && $v->isSubmitted() && !$v->isValid()) {
-                    $response->setStatusCode(422);
-                    break;
-                }
+            if (array_any($parameters, static fn ($v): bool => $v instanceof FormInterface && $v->isSubmitted() && !$v->isValid())) {
+                $response->setStatusCode(422);
             }
         }
 
